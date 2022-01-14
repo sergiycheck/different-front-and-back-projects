@@ -1,0 +1,146 @@
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+
+:root {
+  --font-size-main: calc(10px + 1vmin);
+  --item-gap: 0.25rem;
+  --part-gap: calc(0.7rem + 1vmin);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: var(--font-size-main);
+}
+
+img {
+  max-width: 100%;
+  max-height: 550px;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+.page {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  max-width: 960px;
+  margin: 0 auto;
+  row-gap: var(--part-gap);
+  color: white;
+  padding: 0 0.5rem 0 0.5rem;
+}
+
+.page__header,
+.page__footer {
+  flex-shrink: 0;
+  text-align: center;
+  background-color: #d85745;
+}
+
+.page .page__header {
+  padding: 1rem;
+}
+
+.page__body {
+  flex-grow: 1;
+  display: flex;
+  column-gap: var(--part-gap);
+}
+
+.gallery {
+  flex-wrap: wrap;
+  gap: var(--item-gap);
+  display: flex;
+  justify-content: center;
+}
+
+.gallery__item {
+  display: flex;
+  justify-content: center;
+}
+
+.content__section {
+  width: 75%;
+  background-color: rgb(247, 247, 247);
+  order: 1;
+}
+
+.aside__section {
+  width: 25%;
+  background-color: rgb(247, 247, 247);
+  order: 2;
+}
+
+@media screen and (max-width: 600px) {
+  .page__body {
+    flex-grow: 1;
+    display: flex;
+    gap: var(--part-gap);
+    flex-direction: column;
+  }
+
+  .content__section {
+    order: 2;
+    width: 100%;
+  }
+
+  .aside__section {
+    order: 1;
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .gallery__item {
+    flex: 1 0 100%;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .gallery__item {
+    flex: 1 0 49%;
+  }
+}
+
+@media screen and (min-width: 960px) {
+  .gallery__item {
+    flex: 1 0 32.9%;
+  }
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--item-gap);
+}
+
+.menu .menu__item a {
+  padding: 0.5rem;
+  cursor: pointer;
+  display: block;
+  background-color: rgb(168, 194, 189);
+}
+
+.menu .menu__item a:hover {
+  background-color: rgb(150, 201, 191);
+}
