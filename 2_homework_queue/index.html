@@ -1,0 +1,54 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>homework queue</title>
+  </head>
+  <body>
+    <div class="page">
+      <header class="page__header">
+        <h1>Header</h1>
+      </header>
+      <main class="page__body">
+        <div class="content__section">
+          <h1>queue</h1>
+          <div class="queue-info-container">
+            <h3>head <span class="front-data"></span></h3>
+            <h3>rear <span class="rear-data"></span></h3>
+          </div>
+
+          <div class="queue-container flex-column-container"></div>
+        </div>
+
+        <aside class="aside__section">
+          <form action="" id="queue-form">
+            <input
+              class="w-100"
+              type="text"
+              id="queue-input"
+              name="queue-input"
+              placeholder="enter queue value"
+              autocomplete="off"
+            />
+
+            <div class="flex-column-container">
+              <div class="item">
+                <button id="enqueue-btn" name="enqueue-btn" disabled>enqueue</button>
+              </div>
+              <div class="item">
+                <button id="dequeue-btn" name="dequeue-btn">dequeue</button>
+              </div>
+              <div class="item">
+                <button id="reset-btn" name="reset-btn">reset</button>
+              </div>
+            </div>
+          </form>
+        </aside>
+      </main>
+    </div>
+
+    <script src="index.js" type="module"></script>
+  </body>
+</html>
