@@ -36,7 +36,7 @@ function displayQueueIsFullMsg() {
 }
 
 function removeQueueFullMsg() {
-  queueIsFullMessageEl.innerText = "";
+  queueIsFullMessageEl.innerText = "you can add more items";
 }
 
 function appendNewQueueItem(text, index) {
