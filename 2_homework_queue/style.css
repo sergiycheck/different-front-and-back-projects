@@ -8,6 +8,8 @@
   --font-size-main: calc(10px + 1vmin);
   --item-gap: 0.25rem;
   --part-gap: calc(0.7rem + 1vmin);
+  --base-bg: rgb(247, 247, 247);
+  --invalid-cl: #dc3545;
   scroll-behavior: smooth;
 }
 
@@ -56,17 +58,41 @@ ul {
 
 .content__section {
   width: 75%;
-  background-color: rgb(247, 247, 247);
+  background-color: var(--base-bg);
   order: 1;
 }
 
 .aside__section {
   width: 25%;
-  background-color: rgb(247, 247, 247);
+  background-color: var(--base-bg);
   order: 2;
 }
-.w-100 {
+
+.input-control {
   width: 100%;
+  display: block;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.invalid {
+  border-color: var(--invalid-cl);
+}
+
+.invalid-input {
+  display: none;
+  width: 100%;
+  color: var(--invalid-cl);
+  font-size: 0.875em;
+  margin-top: 0.25rem;
+}
+
+.input-control.invalid ~ .invalid-input {
+  display: block;
 }
 
 @media screen and (max-width: 600px) {
@@ -104,10 +130,6 @@ ul {
   .gallery__item {
     flex: 1 0 32.9%;
   }
-}
-
-.invalid {
-  border-color: red;
 }
 
 .queue-info-container {

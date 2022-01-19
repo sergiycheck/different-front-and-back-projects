@@ -8,9 +8,7 @@
   </head>
   <body>
     <div class="page">
-      <header class="page__header">
-        <h1>Header</h1>
-      </header>
+      <header class="page__header"></header>
       <main class="page__body">
         <div class="content__section">
           <h1>queue</h1>
@@ -25,13 +23,14 @@
         <aside class="aside__section">
           <form action="" id="queue-form">
             <input
-              class="w-100"
+              class="input-control"
               type="text"
               id="queue-input"
               name="queue-input"
               placeholder="enter queue value"
               autocomplete="off"
             />
+            <div class="invalid-input">please enter some text for queue</div>
 
             <div class="flex-column-container">
               <div class="item">

@@ -2,7 +2,10 @@ import { enqueue, dequeue, resetQueue } from "./queueActions.js";
 
 function addFormHandlers() {
   const form = document.getElementById("queue-form");
+
   const input = form.elements["queue-input"];
+  const invalidFeedBackForInput = form.querySelector(".invalid-input");
+
   const enqueueBtn = form.elements["enqueue-btn"];
   const dequeueBtn = form.elements["dequeue-btn"];
   const resetBtn = form.elements["reset-btn"];
@@ -23,28 +26,22 @@ function addFormHandlers() {
   );
 
   function focusOutEventHandler(e) {
-    if (e.target.tagName === "INPUT") {
-      if (!input.value) {
-        input.classList.add("invalid");
-      } else {
-        input.classList.remove("invalid");
-      }
-    }
-  }
-
-  function focusinEventHandler(e) {
-    if (e.target.tagName === "INPUT") {
+    if (!input.value) {
+      input.classList.add("invalid");
+    } else {
       input.classList.remove("invalid");
     }
   }
 
+  function focusinEventHandler(e) {
+    input.classList.remove("invalid");
+  }
+
   function inputEventHandler(e) {
-    if (e.target.tagName === "INPUT") {
-      if (e.target.value) {
-        enqueueBtn.removeAttribute("disabled");
-      } else {
-        enqueueBtn.setAttribute("disabled", true);
-      }
+    if (e.target.value) {
+      enqueueBtn.removeAttribute("disabled");
+    } else {
+      enqueueBtn.setAttribute("disabled", true);
     }
   }
 
