@@ -1,3 +1,5 @@
+const myAge = 21;
+
 class MyQueue {
   constructor() {
     this.reset();
@@ -7,6 +9,7 @@ class MyQueue {
     this.front = 0;
     this.rear = 0;
     this.arr = new Array();
+    this.max = myAge;
   }
 
   push(x) {
@@ -30,16 +33,18 @@ class MyQueue {
       front: this.front,
       rear: this.rear,
       arr: this.arr,
+      max: this.max,
     };
 
     return state;
   }
 
   set state(data) {
-    const { front, rear, arr } = data;
+    const { front, rear, arr, max } = data;
     this.front = front;
     this.rear = rear;
     this.arr = arr;
+    this.max = max;
   }
 }
 

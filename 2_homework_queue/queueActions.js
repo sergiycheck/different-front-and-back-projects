@@ -5,25 +5,38 @@ const queueContainerEl = document.querySelector(".queue-container");
 
 const frontDataEl = document.querySelector(".front-data");
 const rearDataEl = document.querySelector(".rear-data");
+const maxItemsEl = document.querySelector(".max-items-data");
+const queueIsFullMessageEl = document.querySelector(".queue-is-full-msg");
+
 const queueItems = queueContainerEl.children;
 
 const queue = new MyQueue();
 
 function loadQueue() {
   const state = loadState();
-  if (!state) return;
-  queue.state = state;
+  if (state) {
+    queue.state = state;
 
-  queue.arr.forEach((num, index) => {
-    appendNewQueueItem(num, index);
-  });
+    queue.arr.forEach((num, index) => {
+      appendNewQueueItem(num, index);
+    });
+  }
 
   displayQueueInfo();
 }
 
 function displayQueueInfo() {
-  frontDataEl.innerText = `${queue.front}`;
-  rearDataEl.innerText = `${queue.rear}`;
+  frontDataEl.innerText = `: ${queue.front},`;
+  rearDataEl.innerText = `: ${queue.rear},`;
+  maxItemsEl.innerText = `: ${queue.max}`;
+}
+
+function displayQueueIsFullMsg() {
+  queueIsFullMessageEl.innerText = "queue is full, please dequeue to add new items";
+}
+
+function removeQueueFullMsg() {
+  queueIsFullMessageEl.innerText = "";
 }
 
 function appendNewQueueItem(text, index) {
@@ -38,23 +51,38 @@ function appendNewQueueItem(text, index) {
   queueContainerEl.appendChild(div);
 }
 
-function enqueue(text) {
-  const index = queue.push(text);
-  appendNewQueueItem(text, index);
-
-  saveState(queue.state);
+function setMaxItemsQueue(num) {
+  queue.max = num;
   displayQueueInfo();
+}
+
+function enqueue(text) {
+  if (queue.rear - queue.front < queue.max) {
+    const index = queue.push(text);
+    appendNewQueueItem(text, index);
+
+    saveState(queue.state);
+    displayQueueInfo();
+
+    return true;
+  }
+
+  displayQueueIsFullMsg();
+
+  return false;
 }
 
 function dequeue() {
   const { num, previousFront } = queue.pop();
-  if (num === -1) return -1;
+  if (num === -1) return false;
 
   const elemToRemove = Array.from(queueItems).find((el) => Number(el.dataset.indexOfNum) === previousFront);
   markItemRemoved(elemToRemove);
 
   saveState(queue.state);
   displayQueueInfo();
+  removeQueueFullMsg();
+  return true;
 }
 
 function markItemRemoved(removedElem) {
@@ -70,6 +98,7 @@ function resetQueue() {
 
   saveState(queue.state);
   displayQueueInfo();
+  removeQueueFullMsg();
 }
 
-export { enqueue, dequeue, loadQueue, resetQueue };
+export { enqueue, dequeue, loadQueue, resetQueue, setMaxItemsQueue };
