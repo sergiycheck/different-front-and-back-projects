@@ -52,7 +52,6 @@ function addFormHandlers() {
       const newValue = input.value.trim();
       input.value = "";
 
-      console.log(newValue);
       const isAllowedToEnqueue = enqueue(newValue);
 
       if (!isAllowedToEnqueue) {

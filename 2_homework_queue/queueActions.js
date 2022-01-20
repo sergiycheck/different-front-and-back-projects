@@ -29,14 +29,12 @@ function displayQueueInfo() {
   frontDataEl.innerText = `: ${queue.front},`;
   rearDataEl.innerText = `: ${queue.rear},`;
   maxItemsEl.innerText = `: ${queue.max}`;
-}
 
-function displayQueueIsFullMsg() {
-  queueIsFullMessageEl.innerText = "queue is full, please dequeue to add new items";
-}
-
-function removeQueueFullMsg() {
-  queueIsFullMessageEl.innerText = "you can add more items";
+  if (queue.rear - queue.front < queue.max) {
+    queueIsFullMessageEl.innerText = "you can add more items";
+  } else {
+    queueIsFullMessageEl.innerText = "queue is full, please dequeue to add new items";
+  }
 }
 
 function appendNewQueueItem(text, index) {
@@ -67,8 +65,6 @@ function enqueue(text) {
     return true;
   }
 
-  displayQueueIsFullMsg();
-
   return false;
 }
 
@@ -81,7 +77,6 @@ function dequeue() {
 
   saveState(queue.state);
   displayQueueInfo();
-  removeQueueFullMsg();
   return true;
 }
 
@@ -98,7 +93,6 @@ function resetQueue() {
 
   saveState(queue.state);
   displayQueueInfo();
-  removeQueueFullMsg();
 }
 
 export { enqueue, dequeue, loadQueue, resetQueue, setMaxItemsQueue };
