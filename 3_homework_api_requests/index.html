@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>homework api requests</title>
+  </head>
+  <body>
+    <div class="page">
+      <header class="page__header"></header>
+      <main class="page__body">
+        <div class="content__section">
+          <h1>entities</h1>
+
+          <div class="users-container"></div>
+        </div>
+
+        <aside class="aside__section">
+          <h1>aside</h1>
+
+          <form class="mt-2" name="user-form">
+            <input
+              class="input-control"
+              type="text"
+              id="user-first_name-input"
+              name="user-first_name-input"
+              placeholder="enter user name"
+              autocomplete="off"
+            />
+            <div class="invalid-input">name can not be empty</div>
+            <input
+              class="input-control mt-2"
+              type="text"
+              id="user-last_name-input"
+              name="user-last_name-input"
+              placeholder="enter user surname"
+              autocomplete="off"
+            />
+            <div class="invalid-input">last name can not be empty</div>
+
+            <div class="flex-column-container">
+              <div class="item">
+                <button class="btn btn-primary" id="save-btn" name="save-btn">save</button>
+              </div>
+            </div>
+          </form>
+        </aside>
+      </main>
+    </div>
+
+    <script src="index.js" type="module"></script>
+  </body>
+</html>
