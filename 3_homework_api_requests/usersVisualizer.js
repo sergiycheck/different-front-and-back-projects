@@ -1,135 +1,8 @@
-import { client } from "./api/client.js";
-import { UserStateFetcher } from "./userStateFetcher.js";
-import { usersRoute } from "./api/apiRoutes.js";
 import { createElement } from "./helpers/createElement.js";
 import { getLoader } from "./helpers/loaderElement.js";
-import { focusinInputHandler, formSaveButtonSubmitHandler } from "./addFormHandlers.js";
-
-const usersFetcher = new UserStateFetcher(usersRoute, client);
-
-const createUserUpdateForm = (user) => {
-  const userFirstNameInput = createElement({
-    tag: "input",
-    id: "user-updateName-input",
-    classList: "input-control",
-    value: user.first_name,
-    attributes: [
-      { key: "name", value: "user-first_name-input" },
-      { key: "autocomplete", value: "off" },
-    ],
-  });
-
-  const warningForUserFirstNameInput = createElement({
-    tag: "div",
-    classList: "invalid-input",
-    innerText: "name can not be empty",
-  });
-
-  const userLastNameInput = createElement({
-    tag: "input",
-    id: "user-updateSurname-input",
-    value: user.last_name,
-    classList: "input-control mt-2",
-    attributes: [
-      { key: "name", value: "user-last_name-input" },
-      { key: "autocomplete", value: "off" },
-    ],
-  });
-
-  const warningForUserLastNameInput = createElement({
-    tag: "div",
-    classList: "invalid-input",
-    innerText: "last name can not be empty",
-  });
-
-  const saveButton = createElement({
-    tag: "button",
-    classList: "btn btn-info",
-    innerText: "save",
-    attributes: [{ key: "name", value: "save-btn" }],
-  });
-
-  const saveItemDiv = createElement({
-    tag: "div",
-    classList: "item",
-    children: [saveButton],
-  });
-
-  const cancelButton = createElement({
-    tag: "button",
-    classList: "btn btn-info",
-    innerText: "cancel",
-    attributes: [{ key: "name", value: "cancel-btn" }],
-  });
-
-  const cancelItemDiv = createElement({
-    tag: "div",
-    classList: "item",
-    children: [cancelButton],
-  });
-
-  const flexColumnContainer = createElement({
-    tag: "div",
-    classList: "flex-container",
-    children: [cancelItemDiv, saveItemDiv],
-  });
-
-  const updateForm = createElement({
-    tag: "form",
-    attributes: [{ key: "name", value: "update-user-form" }],
-    onsubmit: updateFormSubmitEventHandler,
-    children: [
-      userFirstNameInput,
-      warningForUserFirstNameInput,
-      userLastNameInput,
-      warningForUserLastNameInput,
-      flexColumnContainer,
-    ],
-  });
-
-  updateForm.addEventListener("focusin", focusinInputHandler);
-
-  const formContainer = createElement({
-    tag: "div",
-    classList: "overlay__form-container",
-    children: [updateForm],
-  });
-
-  const divOverlay = createElement({
-    tag: "div",
-    classList: "overlay",
-    children: [formContainer],
-  });
-
-  async function updateFormSubmitEventHandler(e) {
-    e.preventDefault();
-
-    const submitter = e.submitter;
-    if (submitter === cancelButton) {
-      divOverlay.remove();
-    } else if (submitter === saveButton) {
-      await formSaveButtonSubmitHandler(null, updateSaveExecutor, updateForm);
-
-      async function updateSaveExecutor(updatedFields) {
-        console.log("updated fields", updatedFields);
-
-        const updatedUser = await usersFetcher.fetchPutData({ id: user.id, data: { ...user, ...updatedFields } });
-        console.log("updated user", updatedUser);
-
-        const usersContainer = document.querySelector(".users-container");
-        const userContainer = usersContainer.querySelector(`#user-${updatedUser.id}`);
-        const userInfoStrong = userContainer.querySelector("strong");
-        userInfoStrong.innerText = `${updatedUser.first_name} ${updatedUser.last_name}`;
-
-        updateForm.removeEventListener("focusin", focusinInputHandler);
-
-        divOverlay.remove();
-      }
-    }
-  }
-
-  document.body.prepend(divOverlay);
-};
+import { usersFetcherInstance } from "./userStateFetcher.js";
+import { createUserUpdateForm } from "./userUpdateForm.js";
+import { MyHttpError, UserVisualizationError, ValidationError } from "./errors/errors.js";
 
 class UserVisualizer {
   constructor(selector = ".users-container") {
@@ -140,13 +13,21 @@ class UserVisualizer {
   async visualizeUsers() {
     const loader = getLoader();
     this.usersContainerElement.appendChild(loader);
-    const users = await usersFetcher.fetchGetData();
-    if (!users) return;
-    loader.remove();
 
-    users.forEach((user) => {
-      this.#addUser({ user, avatarSrc: user.avatar });
-    });
+    try {
+      const users = await usersFetcherInstance.fetchGetData();
+      if (!users) return;
+      loader.remove();
+
+      users.forEach((user) => {
+        this.#addUser({ user, avatarSrc: user.avatar });
+      });
+    } catch (error) {
+      if (error instanceof MyHttpError) {
+        throw new UserVisualizationError(`an error occured while visualizing users. ${error.message}`, error.stack);
+      }
+      throw error;
+    }
   }
 
   #addUser({ user, avatarSrc }) {
@@ -179,7 +60,7 @@ class UserVisualizer {
     this.usersContainerElement.prepend(
       createElement({
         tag: "div",
-        classList: "user-container",
+        classList: "user-container mt-2",
         id: `user-${user.id}`,
         children: [userData, updateButton],
       })
@@ -187,7 +68,11 @@ class UserVisualizer {
   }
 
   async addNewUser(user) {
-    const createdUser = await usersFetcher.fetchAddNewData(user);
+    if (user.first_name === "error") {
+      throw new ValidationError("can not add user with name error");
+    }
+
+    const createdUser = await usersFetcherInstance.fetchAddNewData(user);
     if (!createdUser) return;
 
     this.#addUser({
@@ -196,11 +81,20 @@ class UserVisualizer {
     });
   }
 
+  //updateUser is a function (closure) //all functions in js are closures with hidden property named [[Environment]], that
+  // keeps the reference to the Lexical Environment where the function was created;
+  //a closure is a function that remembers its outer variables and can access them;
+  //updateUser returns a function showUpdateForm that has reference to the argument id of updateUse function.
+  // when we call showUpdateForm on button click a new Lexical Environment is created for call, and its outer Lexical
+  //Environment reference is taken from onclick.[[Environment]] that stored id value.
+
   updateUser(id) {
-    return async function () {
-      const user = usersFetcher.users.find((u) => u.id === id);
+    async function showUpdateForm() {
+      const user = usersFetcherInstance.users.find((u) => u.id === id);
       createUserUpdateForm(user);
-    };
+    }
+    showUpdateForm = showUpdateForm.bind(this);
+    return showUpdateForm;
   }
 }
 

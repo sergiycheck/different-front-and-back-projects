@@ -1,3 +1,29 @@
+import { ValidationError, MyError, ConcurrencyError } from "./errors/errors.js";
+
+async function callFormSaveButtonSubmitHandlerWithTryCatch(thisValue, submitNewUserFunc, form) {
+  try {
+    await formSaveButtonSubmitHandler(thisValue, submitNewUserFunc, form);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      window.dispatchEvent(
+        new CustomEvent("CustomWindowErrorListener", {
+          detail: {
+            error: new MyError(`Form submit failed. ${error.message}`, error.stack),
+          },
+        })
+      );
+      return;
+    }
+    window.dispatchEvent(
+      new CustomEvent("CustomWindowErrorListener", {
+        detail: {
+          error: new MyError(`Unknown error. ${error.message}`, error.stack),
+        },
+      })
+    );
+  }
+}
+
 function addFormHandlers(thisValue, submitNewUserFunc, formName) {
   const form = document.forms[formName];
 
@@ -10,8 +36,12 @@ function addFormHandlers(thisValue, submitNewUserFunc, formName) {
   async function submitEventHandler(e) {
     e.preventDefault();
 
-    await formSaveButtonSubmitHandler(thisValue, submitNewUserFunc, form);
+    await callFormSaveButtonSubmitHandlerWithTryCatch(thisValue, submitNewUserFunc, form);
   }
+
+  form.addEventListener("error", (e) => {
+    console.log("form error handler", e);
+  });
 }
 
 function focusinInputHandler(e) {
@@ -34,7 +64,7 @@ async function formSaveButtonSubmitHandler(thisValue, submitNewUserFunc, form) {
     }
   }
 
-  if (!validFormElements) return;
+  if (!validFormElements) throw new ValidationError("Invalid input values");
 
   for (let input of form.elements) {
     if (input.tagName === "INPUT") {
@@ -44,9 +74,18 @@ async function formSaveButtonSubmitHandler(thisValue, submitNewUserFunc, form) {
 
   form.elements["save-btn"].setAttribute("disabled", true);
 
-  await submitNewUserFunc.call(thisValue, newUser);
+  try {
+    await submitNewUserFunc.call(thisValue, newUser);
+    form.elements["save-btn"].removeAttribute("disabled");
+  } catch (error) {
+    form.elements["save-btn"].removeAttribute("disabled");
 
-  form.elements["save-btn"].removeAttribute("disabled");
+    if (error instanceof ConcurrencyError) {
+      throw new MyError(`Concurrency error occured ${error.message}`, error.stack);
+    }
+
+    throw new MyError(error.message, error.stack);
+  }
 }
 
-export { addFormHandlers, focusinInputHandler, formSaveButtonSubmitHandler };
+export { addFormHandlers, focusinInputHandler, callFormSaveButtonSubmitHandlerWithTryCatch };

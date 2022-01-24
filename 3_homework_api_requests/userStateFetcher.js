@@ -1,7 +1,9 @@
 import { usersUpdateDeleteRoute } from "./api/apiRoutes.js";
+import { client } from "./api/client.js";
+import { usersRoute } from "./api/apiRoutes.js";
+import { ConcurrencyError } from "./errors/errors.js";
 
-// TODO: remove
-const sleep = (ms) => {
+const simulateLongerRequestToShowLoader = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
@@ -19,7 +21,7 @@ class GenericDataReceiver {
   }
 
   async #makeRequest(callback) {
-    if (!this._canFetch) return;
+    if (!this._canFetch) throw new ConcurrencyError("Can not fetch while processing another fetch");
     this._canFetch = false;
 
     const result = await callback();
@@ -45,8 +47,7 @@ class GenericDataReceiver {
       this._total = total;
       this._totalPages = total_pages;
 
-      // TODO: remove
-      await sleep(1000);
+      await simulateLongerRequestToShowLoader(10);
 
       return [...this._data];
     });
@@ -85,7 +86,7 @@ class GenericDataReceiver {
   }
 }
 
-export class UserStateFetcher extends GenericDataReceiver {
+class UserStateFetcher extends GenericDataReceiver {
   constructor(path, client) {
     super(path, client);
   }
@@ -99,3 +100,7 @@ export class UserStateFetcher extends GenericDataReceiver {
     return await super.fetchPutData({ id, data, route });
   }
 }
+
+const usersFetcherInstance = new UserStateFetcher(usersRoute, client);
+
+export { usersFetcherInstance };

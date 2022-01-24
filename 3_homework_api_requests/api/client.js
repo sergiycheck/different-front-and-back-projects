@@ -1,3 +1,5 @@
+import { MyHttpError, MyError } from "../errors/errors.js";
+
 export async function client(endpoint, { body, ...customConfig } = {}) {
   const headers = { "Content-Type": "application/json" };
 
@@ -17,14 +19,25 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
   let data;
   try {
     const response = await window.fetch(endpoint, config);
-    data = await response.json();
+
+    try {
+      data = await response.json();
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        throw new MyError("syntax error occured while parsing json response", error.stack);
+      }
+    }
+
     if (response.ok) {
       return data;
     }
+
     throw new Error(response.statusText);
   } catch (err) {
-    console.error("An error occurred", err);
-    return Promise.reject(err.message ? err.message : data);
+    if (err instanceof TypeError) {
+      throw new MyHttpError(err.message ? err.message : data, err.stack);
+    }
+    throw err;
   }
 }
 

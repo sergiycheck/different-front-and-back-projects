@@ -54,7 +54,7 @@ ul {
 
 img {
   max-width: 100%;
-  max-height: 550px;
+  max-height: 128px;
 }
 
 .mt-2 {
@@ -89,12 +89,16 @@ img {
   width: 75%;
   background-color: var(--base-bg);
   order: 1;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
 }
 
 .aside__section {
   width: 25%;
   background-color: var(--base-bg);
   order: 2;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
 }
 
 .input-control {
@@ -184,6 +188,11 @@ img {
     order: 1;
     width: 100%;
   }
+
+  .flex-container {
+    flex-direction: column;
+    align-items: flex-end !important;
+  }
 }
 
 .flex-container {
@@ -192,6 +201,10 @@ img {
   gap: var(--item-gap);
   align-items: flex-start;
   justify-content: space-between;
+}
+
+.flex-container.reverse .item:first-child {
+  order: 2;
 }
 
 .flex-column-container {
@@ -214,6 +227,16 @@ img {
 .loader {
   max-width: 150px;
   max-height: 150px;
+}
+
+.users-container {
+  display: flex;
+  flex-direction: column;
+}
+.user-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
 }
 
 .overlay {
