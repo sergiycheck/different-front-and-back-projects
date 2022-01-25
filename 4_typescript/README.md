@@ -24,4 +24,10 @@ run
 npm run watch
 ```
 
-to emit changes into build folder.\_\_ Webpack is used to build the project and define correct extensions for the build version.
+to emit changes into build folder.<br /> Webpack is used to build the project and define correct extensions for the build version. <br /> You can see the result of
+
+```javascript
+updateObjectInArray < ObjectShape > (initialArray, keyToFind, keyValueToFind, patch);
+```
+
+in the browser console.
