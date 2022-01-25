@@ -1,0 +1,231 @@
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+
+:root {
+  --font-size-main: calc(10px + 1vmin);
+  --item-gap: 0.1rem;
+  --part-gap: calc(0.7rem + 1vmin);
+  --base-bg: rgb(247, 247, 247);
+  --default-form-el-padding: 0.375rem 0.75rem;
+  --default-el-border-radius: 0.25rem;
+  --flex-container-df-mt: 0.5rem;
+
+  --invalid-cl: #dc3545;
+  --primary-bg-cl: #0d6efd;
+  --primary-bg-cl-hovered: #0b5ed7;
+  --primary-bg-cl-border-hovered: #0a58ca;
+
+  --info-bg-cl: #0ea7e9;
+  --info-bg-cl-hovered: #0db5fd;
+
+  --primary-cl-black: #212529;
+  --primary-cl-white: white;
+  --primary-cl-violet: blueviolet;
+  --primary-cl-gray: gray;
+  --primary-cl-disabled-white: #ced4da;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: var(--font-size-main);
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h5,
+p {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  max-height: 128px;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.page {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  max-width: 960px;
+  margin: 0 auto;
+  row-gap: var(--part-gap);
+  padding: 0 0.5rem 0 0.5rem;
+}
+
+.page .page__header {
+  padding: 1rem;
+}
+
+.page__body {
+  flex-grow: 1;
+  display: flex;
+  column-gap: var(--part-gap);
+  justify-content: center;
+}
+
+.content__section {
+  width: 75%;
+  background-color: var(--base-bg);
+  order: 1;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.aside__section {
+  width: 25%;
+  background-color: var(--base-bg);
+  order: 2;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.input-control {
+  width: 100%;
+  display: block;
+  background-color: var(--primary-cl-white);
+  background-clip: padding-box;
+  border: 1px solid var(--primary-cl-disabled-white);
+  border-radius: var(--default-el-border-radius);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: var(--default-form-el-padding);
+}
+
+.invalid {
+  border-color: var(--invalid-cl);
+}
+
+.invalid-input {
+  display: none;
+  width: 100%;
+  color: var(--invalid-cl);
+  font-size: 0.875em;
+  margin-top: 0.25rem;
+}
+
+.input-control.invalid + .invalid-input {
+  display: block;
+}
+
+.btn {
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--primary-cl-black);
+  cursor: pointer;
+  border: 1px solid transparent;
+  padding: var(--default-form-el-padding);
+  border-radius: var(--default-el-border-radius);
+}
+
+.btn-primary {
+  color: var(--primary-cl-white);
+  background-color: var(--primary-bg-cl);
+  border-color: var(--primary-bg-cl);
+}
+
+.btn-primary:hover {
+  color: var(--primary-cl-white);
+  background-color: var(--primary-bg-cl-hovered);
+  border-color: var(--primary-bg-cl-border-hovered);
+}
+
+.btn-info {
+  color: var(--primary-cl-white);
+  background-color: var(--info-bg-cl);
+  border-color: var(--info-bg-cl);
+}
+
+.btn-info:hover {
+  color: var(--primary-cl-white);
+  background-color: var(--info-bg-cl-hovered);
+  border-color: var(--info-bg-cl-hovered);
+}
+
+.btn-primary:disabled {
+  color: var(--primary-cl-black);
+  background-color: var(--primary-cl-disabled-white);
+  border-color: var(--primary-cl-disabled-white);
+}
+
+@media screen and (max-width: 600px) {
+  .page__body {
+    flex-grow: 1;
+    display: flex;
+    gap: var(--part-gap);
+    flex-direction: column;
+  }
+
+  .content__section {
+    order: 2;
+    width: 100%;
+  }
+
+  .aside__section {
+    order: 1;
+    width: 100%;
+  }
+
+  .flex-container {
+    flex-direction: column;
+    align-items: flex-end !important;
+  }
+}
+
+.flex-container {
+  margin-top: var(--flex-container-df-mt);
+  display: flex;
+  gap: var(--item-gap);
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.flex-container.reverse .item:first-child {
+  order: 2;
+}
+
+.flex-column-container {
+  margin-top: var(--flex-container-df-mt);
+  display: flex;
+  flex-direction: column;
+  gap: var(--item-gap);
+}
+
+.posts-container {
+  display: flex;
+  flex-direction: column;
+}
