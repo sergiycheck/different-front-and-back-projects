@@ -1,0 +1,26 @@
+.movie-item {
+  list-style: none;
+  width: fit-content;
+  padding: 0.5rem;
+  border: 1px solid rgb(214, 214, 214);
+  border-radius: 0.25rem;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.movie-bottom-side {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.img-container {
+  max-height: 250px;
+  max-width: 150px;
+}
+
+.img-container img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
