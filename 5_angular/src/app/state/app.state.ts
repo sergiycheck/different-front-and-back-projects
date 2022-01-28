@@ -1,6 +1,9 @@
-import { Movie } from '../models/models.interface';
+import { moviesInitialState } from './movies.reducer';
+import { collectionInitialState } from './collection.reducer';
+import { myCustomMoviesInitialState } from './myCustomMovie.reducer';
 
 export interface AppState {
-  movies: ReadonlyArray<Movie>;
-  collection: ReadonlyArray<string>;
+  movies: typeof moviesInitialState;
+  collection: typeof collectionInitialState;
+  myCustomMovies: typeof myCustomMoviesInitialState;
 }

@@ -17,7 +17,10 @@ import { imgRoute } from 'src/app/api/api-routes';
               <img [src]="imageRoute + movie.poster_path" [alt]="movie.title" />
             </div>
             <div class="movie-actions">
-              <button (click)="buttonClickHandler.emit(movie)">
+              <button
+                class="btn btn-primary"
+                (click)="buttonClickHandler.emit(movie)"
+              >
                 {{ buttonHandlerText }}
               </button>
             </div>
@@ -33,7 +36,7 @@ export class MovieViewExcerptComponent implements OnInit {
   public imageRoute = imgRoute;
   @Output() buttonClickHandler = new EventEmitter<Movie>();
   @Input() buttonHandlerText = '';
-  public scaleValue = 1.05;
+  public scaleValue = 1.02;
 
   constructor() {}
 

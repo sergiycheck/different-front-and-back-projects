@@ -19,6 +19,10 @@ import { collectionReducer } from './state/collection.reducer';
 import { MovieViewExcerptComponent } from './components/movie-list/movie-view-excerpt/movie-view-excerpt.component';
 import { CustomdatePipe } from './pipes/customdate.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
+import { AddMyFavoriteMovieComponent } from './components/add-my-favorite-movie/add-my-favorite-movie.component';
+import { myCustomMoviesReducer } from './state/myCustomMovie.reducer';
+import { metaReducers } from './state/middleware-meta.reducer';
+import { ForbiddenPopularityValidatorDirective } from './directives/forbidden-popularity-validator.directive';
 
 @NgModule({
   declarations: [
@@ -33,6 +37,8 @@ import { HighlightDirective } from './directives/highlight.directive';
     MovieViewExcerptComponent,
     CustomdatePipe,
     HighlightDirective,
+    AddMyFavoriteMovieComponent,
+    ForbiddenPopularityValidatorDirective,
   ],
   imports: [
     BrowserModule,
@@ -40,10 +46,14 @@ import { HighlightDirective } from './directives/highlight.directive';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    StoreModule.forRoot({
-      movies: moviesReducer,
-      collection: collectionReducer,
-    }),
+    StoreModule.forRoot(
+      {
+        movies: moviesReducer,
+        collection: collectionReducer,
+        myCustomMovies: myCustomMoviesReducer,
+      },
+      { metaReducers }
+    ),
   ],
   providers: [
     MovieService,

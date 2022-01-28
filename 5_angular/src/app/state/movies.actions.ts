@@ -15,3 +15,13 @@ export const retrievedMoviesList = createAction(
   '[Movie List/API] Retrive Movie Success',
   props<{ movies: ReadonlyArray<Movie> }>()
 );
+
+export const addMyCustomMovie = createAction(
+  '[MyCustomMovie List] Add Movie',
+  props<{ movie: Movie }>()
+);
+
+export const removeMyCustomMovie = createAction(
+  '[MyCustomMovie List] Remove Movie',
+  props<{ movieId: string }>()
+);

@@ -7,11 +7,27 @@ export const selectMovies =
 export const selectCollectionState =
   createFeatureSelector<ReadonlyArray<string>>('collection');
 
+export const selectMyCustomMoviesState =
+  createFeatureSelector<ReadonlyArray<Movie>>('myCustomMovies');
+
 export const selectMovieCollection = createSelector(
   selectMovies,
   selectCollectionState,
-  (movies, collection) => {
-    return collection.map((id) => movies.find((movie) => movie.id === id));
+  selectMyCustomMoviesState,
+  (movies, collection, myCustomMovies) => {
+    const favoriteMoviesFromFetchedMovies = collection.map((id) =>
+      movies.find((movie) => movie.id === id)
+    );
+
+    const favoriteMoviesFromMyCustomMovies = collection.map((id) =>
+      myCustomMovies.find((movie) => movie.id === id)
+    );
+
+    const resultArr = [
+      ...favoriteMoviesFromFetchedMovies,
+      ...favoriteMoviesFromMyCustomMovies,
+    ].filter((item) => item);
+    return resultArr;
   }
 );
 

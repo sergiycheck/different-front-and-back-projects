@@ -13,6 +13,7 @@ import { map } from 'rxjs/operators';
     <div>
       <ul class="movie-items-list">
         <app-movie-item
+          class="col-sm-4"
           *ngFor="let movieId of movieIds"
           [movieId]="movieId"
         ></app-movie-item>
@@ -40,12 +41,12 @@ export class MovieListComponent implements OnInit, OnDestroy {
         map((movies) => {
           return movies.map((movie) => ({
             ...movie,
+            popularity: `${Math.round(Number(movie.popularity))}`,
             favorite: false,
           }));
         })
       )
       .subscribe((movies) => {
-        console.log('movies', movies);
         this.store.dispatch(retrievedMoviesList({ movies }));
       });
   }

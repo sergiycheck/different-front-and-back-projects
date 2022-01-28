@@ -4,20 +4,30 @@ import { Movie } from 'src/app/models/models.interface';
 import { selectMovieCollection } from 'src/app/state/movies.selectors';
 import { removeMovie } from 'src/app/state/movies.actions';
 import { imgRoute } from 'src/app/api/api-routes';
+import { removeMyCustomMovie } from 'src/app/state/movies.actions';
 
 @Component({
   selector: 'app-favorite-movie-list',
   template: `
-    <div>
-      <ul class="favorite-movie-list">
-        <app-movie-view-excerpt
-          *ngFor="let movie of favoriteMovies"
-          [movie]="movie"
-          (buttonClickHandler)="onRemove($event)"
-          [buttonHandlerText]="buttonText"
-        ></app-movie-view-excerpt>
-      </ul>
-    </div>
+    <p *ngIf="!favoriteMovies.length">
+      There are no favorite movies. Navigate to the
+      <a
+        routerLink="/popular-movies"
+        routerLinkActive="active"
+        class="active-link "
+        >Popular movies</a
+      >
+      page, add some favorite movie and see the results
+    </p>
+    <ul class="movie-items-list">
+      <app-movie-view-excerpt
+        class="col-12"
+        *ngFor="let movie of favoriteMovies"
+        [movie]="movie"
+        (buttonClickHandler)="onRemove($event)"
+        [buttonHandlerText]="buttonText"
+      ></app-movie-view-excerpt>
+    </ul>
   `,
 })
 export class FavoriteMovieListComponent implements OnInit, OnDestroy {
@@ -33,6 +43,7 @@ export class FavoriteMovieListComponent implements OnInit, OnDestroy {
 
   onRemove(movie: Movie): void {
     this.store.dispatch(removeMovie({ movieId: movie.id }));
+    this.store.dispatch(removeMyCustomMovie({ movieId: movie.id }));
   }
 
   ngOnInit(): void {

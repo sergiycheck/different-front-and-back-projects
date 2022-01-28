@@ -1,11 +1,19 @@
 import { createReducer, on } from '@ngrx/store';
-import { addMovie, removeMovie } from './movies.actions';
+import {
+  addMovie,
+  removeMovie,
+  addMyCustomMovie,
+  removeMyCustomMovie,
+} from './movies.actions';
 
-export const initialState: ReadonlyArray<string> = [];
+export const collectionInitialState: ReadonlyArray<string> = [];
 
 export const collectionReducer = createReducer(
-  initialState,
+  collectionInitialState,
   on(removeMovie, (state, { movieId }) => state.filter((id) => id !== movieId)),
+  on(removeMyCustomMovie, (state, { movieId }) =>
+    state.filter((id) => id !== movieId)
+  ),
   on(addMovie, (state, { movieId }) => {
     const movieIsInFavoriteList = Boolean(state.indexOf(movieId) > -1);
 
@@ -14,5 +22,14 @@ export const collectionReducer = createReducer(
     }
 
     return [...state, movieId];
+  }),
+  on(addMyCustomMovie, (state, { movie }) => {
+    const movieIsInFavoriteList = Boolean(state.indexOf(movie.id) > -1);
+
+    if (movieIsInFavoriteList) {
+      return state;
+    }
+
+    return [...state, movie.id];
   })
 );
