@@ -8,7 +8,7 @@ Install all dependencies
 npm i
 ```
 
-Make sure you have mongodb server running locally otherwise change the connectoin string in the nodemon.json file.
+Make sure you have mongodb server running locally otherwise change the connection string in the nodemon.json file.
 
 Start the local server
 
