@@ -1,4 +1,5 @@
 module.exports = {
   users: null,
-  articles: null
+  articles: null,
+  students: null
 };

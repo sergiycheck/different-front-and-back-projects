@@ -4,6 +4,8 @@ const connection = require('./config/connection');
 
 const collections = require('./appCollections');
 
+const studentsArr = require('./students.json');
+
 const {
   create2UsersPerDepartment,
   delete1UserFromDepartment,
@@ -19,14 +21,27 @@ const {
   removeTagsFromArticlesTagList
 } = require('./articlesCollectionFuncs');
 
+const {
+  findAllStudentsWithTheWorstHWScore,
+  findAllStudentsWithTheBestScoreForQuizAndWorstHW,
+  averageHomeworkScore,
+  deleteStudentsWithScoreLessThan,
+  markStudentsThatHaveQuizScoreMoreThanSpecified,
+  bucketGroupByAverageGrade,
+  findAllStudentsWithTheBestScoreForQuizAndExam
+} = require('./studentQueries');
+
 run();
 
 async function run() {
   await connection.connect();
   const db = connection.get();
 
-  // await workWithUsersCollection(db);
+  await workWithUsersCollection(db);
+
   await workWithArticlesCollection(db);
+
+  await workWithStudentsCollection(db);
 
   await connection.close();
 }
@@ -52,6 +67,43 @@ async function workWithArticlesCollection(db) {
   await findAllArticlesThatContainsTags(['tag2', 'tag1-a']);
 
   await removeTagsFromArticlesTagList(['tag2', 'tag1-a']);
+}
+
+async function workWithStudentsCollection(db) {
+  await resetCreateCollection(db, 'students');
+
+  await collections.students.insertMany(studentsArr);
+
+  const studentsCount = await collections.students.find({}).count();
+
+  if (!studentsCount) {
+    console.log('import json file into db');
+    return;
+  }
+
+  // - Find all students who have the worst score for homework, sort by descent
+  await findAllStudentsWithTheWorstHWScore();
+
+  // - Find all students who have the best score for quiz and the worst for homework, sort by ascending
+  await findAllStudentsWithTheBestScoreForQuizAndWorstHW();
+
+  // - Find all students who have best scope for quiz and exam
+  await findAllStudentsWithTheBestScoreForQuizAndExam();
+
+  // - Calculate the average score for homework for all students
+  await averageHomeworkScore();
+
+  // - Mark students that have quiz score => 80
+  await markStudentsThatHaveQuizScoreMoreThanSpecified(80);
+
+  // - Write a query that group students by 3 categories (calculate the average grade for three subjects)
+  // - a => (between 0 and 40)
+  // - b => (between 40 and 60)
+  // - c => (between 60 and 100)
+  await bucketGroupByAverageGrade();
+
+  // - Delete all students that have homework score <= 60
+  await deleteStudentsWithScoreLessThan(60);
 }
 
 async function resetCreateCollection(db, collectionName) {
