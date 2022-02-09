@@ -1,0 +1,194 @@
+##
+
+## valid user create 1
+POST http://localhost:4045/api/users HTTP/1.1
+content-type: application/json
+
+{
+	"firstName": "Leanne",
+	"lastName": "Graham",
+	"nickname": "leane1Gra",
+	"role": "guest"
+}
+
+###
+
+## valid user create 2
+POST http://localhost:4045/api/users HTTP/1.1
+content-type: application/json
+
+{
+	"firstName": "Ervin ",
+	"lastName": "Howell",
+	"nickname": "erv3How",
+	"role": "writer"
+}
+
+
+###
+
+## bad user create 
+POST http://localhost:4045/api/users HTTP/1.1
+content-type: application/json
+
+{
+	"firstName": "badFirstName",
+	"lastName": "Howell",
+	"nickname": "wont be created",
+	"role": "unspecified"
+}
+
+
+###
+
+## get user
+GET http://localhost:4045/api/users/6203ad9c77e56b352418cd4d HTTP/1.1
+
+###
+
+##get articles without search query
+GET http://localhost:4045/api/articles HTTP/1.1
+
+###
+
+## get articles list with category query
+
+GET http://localhost:4045/api/articles?category=history HTTP/1.1
+
+###
+
+## get articles list with title query and updatedAt query params
+
+GET http://localhost:4045/api/articles?title=article?updatedAt=2022-02-09T19:50:11.955 HTTP/1.1
+
+###
+
+## get articles list with subtitle query
+
+GET http://localhost:4045/api/articles?subtitle=my+article+1+subtitle HTTP/1.1
+###
+
+## get articles list wit owner query 
+
+GET http://localhost:4045/api/articles?owner=620404570af42d42bead7f22 HTTP/1.1
+
+
+###
+## post article
+
+POST http://localhost:4045/api/articles HTTP/1.1
+content-type: application/json
+
+{
+	"title": "nesciunt iure omnis dolorem tempora et accusantium",
+	"subtitle": "optio molestias id quia eum",
+	"description": "quo et expedita modi cum officia vel magni\ndoloribus qui repudiandae\nvero nisi sit\nquos veniam quod sed accusamus veritatis error",
+	"category": "sport",
+	"owner": "620404570af42d42bead7f22"
+}
+
+###
+
+## delete article successsful
+DELETE http://localhost:4045/api/articles/6203e0e3ad985960c583e3c9 HTTP/1.1
+content-type: application/json
+
+{
+	"owner": "6203ad9c77e56b352418cd4d"
+}
+
+###
+
+## delete article bad
+DELETE http://localhost:4045/api/articles/6203eabd4363dc28ba6e0a2d HTTP/1.1
+content-type: application/json
+
+{
+	"owner": "6203ad9c77e56b352418cd4r"
+}
+
+
+###
+## put article 2022-02-09T16:56:53.562+0000
+
+PUT http://localhost:4045/api/articles/6203eabd4363dc28ba6e0a2d HTTP/1.1
+content-type: application/json
+
+{
+	"title": "my article 2 new title",
+	"subtitle": "my article subtitle 123",
+	"description": "changed description",
+	"category": "games",
+	"owner": "6203ad9c77e56b352418cd4d"
+}
+
+
+###
+## bad put article
+
+PUT http://localhost:4045/api/articles/6203eabd4363dc28ba6e0a2d HTTP/1.1
+content-type: application/json
+
+{
+	"title": "my article 2 new title",
+	"subtitle": "my article subtitle 123",
+	"description": "e ",
+	"category": "games",
+	"owner": "6203ad9c77e56b352418cd4d"
+
+}
+
+
+###
+
+
+## valid user 2 update
+PUT http://localhost:4045/api/users/620404570af42d42bead7f22 HTTP/1.1
+content-type: application/json
+
+{
+	"firstName": "updated 1",
+	"lastName": "lasnameUpdated",
+	"nickname": "ewee",
+	"role": "guest"
+}
+
+
+###
+
+
+## delete me
+POST http://localhost:4045/api/users/ HTTP/1.1
+content-type: application/json
+
+{
+	"firstName": "delete",
+	"lastName": "mePlease",
+	"nickname": "wefewfe",
+	"role": "guest"
+}
+
+###
+##user delete request
+DELETE http://localhost:4045/api/users/6203fea16a20391b2840681a HTTP/1.1
+
+
+###
+## delete articles
+
+POST http://localhost:4045/api/articles HTTP/1.1
+content-type: application/json
+
+{
+	"title": "article to delete title 2",
+	"subtitle": "wefewf",
+	"description": "article to delete description 2",
+	"category": "history",
+	"owner": "6203fea16a20391b2840681a"
+}
+
+
+###
+
+##get articles by user id
+GET http://localhost:4045/api/users/6203ad9c77e56b352418cd4d/articles HTTP/1.1
