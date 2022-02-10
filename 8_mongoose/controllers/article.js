@@ -110,7 +110,7 @@ const updateArticle = async (req, res, next) => {
   try {
     const {article} = await findArticleAndOwner(articleId, ownerId);
 
-    const updateResult = await ArticleModel.updateOne(
+    const updatedArticle = await ArticleModel.findOneAndUpdate(
       {_id: article._id},
       {
         title: req.body.title,
@@ -119,12 +119,12 @@ const updateArticle = async (req, res, next) => {
         category: req.body.category,
         updatedAt: Date.now()
       },
-      {runValidators: true}
+      {runValidators: true, new: true}
     );
 
     res.status(200).json({
       message: `article with id ${articleId} was updated successfully`,
-      updateCount: updateResult.modifiedCount,
+      updatedArticle: mapOnlyArticle(updatedArticle),
       request: {
         type: 'GET',
         url: `/api/articles/${article._id}`

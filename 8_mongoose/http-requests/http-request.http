@@ -85,7 +85,7 @@ POST http://localhost:4045/api/articles HTTP/1.1
 content-type: application/json
 
 {
-	"title": "capped collection",
+	"title": "different collection",
 	"subtitle": "subtitle great",
 	"description": "article desc 123",
 	"category": "sport",
@@ -120,9 +120,9 @@ PUT http://localhost:4045/api/articles/6204ee26316332c2290e46ef HTTP/1.1
 content-type: application/json
 
 {
-	"title": "title changed 12:56",
-	"subtitle": "my subtitle changed 12:56",
-	"description": "changed description 12:56",
+	"title": "title changed abc",
+	"subtitle": "my subtitle changed dde",
+	"description": "changed description ewv",
 	"category": "games",
 	"owner": "620404570af42d42bead7f22"
 }
