@@ -1,4 +1,9 @@
-##
+##get users list
+
+GET http://localhost:4045/api/users HTTP/1.1
+
+
+###
 
 ## valid user create 1
 POST http://localhost:4045/api/users HTTP/1.1
@@ -18,10 +23,10 @@ POST http://localhost:4045/api/users HTTP/1.1
 content-type: application/json
 
 {
-	"firstName": "Ervin ",
-	"lastName": "Howell",
-	"nickname": "erv3How",
-	"role": "writer"
+	"firstName": "Clementine",
+	"lastName": "Bauch",
+	"nickname": "Samantha",
+	"role": "guest"
 }
 
 
@@ -80,9 +85,9 @@ POST http://localhost:4045/api/articles HTTP/1.1
 content-type: application/json
 
 {
-	"title": "nesciunt iure omnis dolorem tempora et accusantium",
-	"subtitle": "optio molestias id quia eum",
-	"description": "quo et expedita modi cum officia vel magni\ndoloribus qui repudiandae\nvero nisi sit\nquos veniam quod sed accusamus veritatis error",
+	"title": "capped collection",
+	"subtitle": "subtitle great",
+	"description": "article desc 123",
 	"category": "sport",
 	"owner": "620404570af42d42bead7f22"
 }
@@ -90,11 +95,11 @@ content-type: application/json
 ###
 
 ## delete article successsful
-DELETE http://localhost:4045/api/articles/6203e0e3ad985960c583e3c9 HTTP/1.1
+DELETE http://localhost:4045/api/articles/62041b44a594c58782f94c6e HTTP/1.1
 content-type: application/json
 
 {
-	"owner": "6203ad9c77e56b352418cd4d"
+	"owner": "620404570af42d42bead7f22"
 }
 
 ###
@@ -111,15 +116,15 @@ content-type: application/json
 ###
 ## put article 2022-02-09T16:56:53.562+0000
 
-PUT http://localhost:4045/api/articles/6203eabd4363dc28ba6e0a2d HTTP/1.1
+PUT http://localhost:4045/api/articles/6204ee26316332c2290e46ef HTTP/1.1
 content-type: application/json
 
 {
-	"title": "my article 2 new title",
-	"subtitle": "my article subtitle 123",
-	"description": "changed description",
+	"title": "title changed 12:56",
+	"subtitle": "my subtitle changed 12:56",
+	"description": "changed description 12:56",
 	"category": "games",
-	"owner": "6203ad9c77e56b352418cd4d"
+	"owner": "620404570af42d42bead7f22"
 }
 
 
@@ -147,9 +152,9 @@ PUT http://localhost:4045/api/users/620404570af42d42bead7f22 HTTP/1.1
 content-type: application/json
 
 {
-	"firstName": "updated 1",
+	"firstName": "updatedUser 1:35",
 	"lastName": "lasnameUpdated",
-	"nickname": "ewee",
+	"nickname": "fwefwef",
 	"role": "guest"
 }
 
@@ -170,7 +175,7 @@ content-type: application/json
 
 ###
 ##user delete request
-DELETE http://localhost:4045/api/users/6203fea16a20391b2840681a HTTP/1.1
+DELETE http://localhost:4045/api/users/6204eb20c79f20a1205b61ce HTTP/1.1
 
 
 ###

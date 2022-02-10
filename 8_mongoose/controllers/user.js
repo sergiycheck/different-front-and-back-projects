@@ -4,7 +4,14 @@ const UserModel = require('../models/user');
 const ArticleModel = require('../models/article');
 const errorHelper = require('../config/errorHelper');
 
-const {findOwner} = require('./user_article_queries');
+const {
+  findOwner,
+  mapOnlyUser,
+  mapUserWithArticles,
+  mapOnlyArticle
+} = require('./user_article_queries');
+
+const {userRouteValue} = require('../apiRoutes');
 
 const findUserMiddleware = async (req, res, next) => {
   const userId = req.params.userId;
@@ -13,6 +20,27 @@ const findUserMiddleware = async (req, res, next) => {
     const user = await findOwner(userId);
     req.user = user;
     next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getUserList = async (req, res, next) => {
+  try {
+    const usersDoc = await UserModel.find()
+      .populate({
+        path: 'articles',
+        select: 'title subtitle description category createdAt updatedAt owner'
+      })
+      .exec();
+
+    res.status(200).json({
+      count: usersDoc.length,
+      users: usersDoc.map(doc => mapUserWithArticles(doc)),
+      request: {
+        type: 'GET'
+      }
+    });
   } catch (error) {
     next(error);
   }
@@ -40,7 +68,7 @@ const createUser = async (req, res, next) => {
 
     res.status(201).json({
       message: 'User created successfully',
-      createdUser
+      createdUser: mapOnlyUser(createdUser)
     });
   } catch (error) {
     next(error);
@@ -59,7 +87,7 @@ const getUserById = async (req, res, next) => {
       .exec();
 
     res.status(200).json({
-      user: userDoc,
+      user: mapUserWithArticles(userDoc),
       request: {
         type: 'GET'
       }
@@ -96,7 +124,11 @@ const updateUser = async (req, res, next) => {
 
     res.status(200).json({
       message: `user with id ${userId} was updated successfully`,
-      user: updatedUser
+      user: mapOnlyUser(updatedUser),
+      request: {
+        type: 'GET',
+        url: `${userRouteValue}/${userId}`
+      }
     });
   } catch (error) {
     next(error);
@@ -131,19 +163,7 @@ const getArticlesByUserId = async (req, res, next) => {
 
     res.status(200).json({
       count: articleDocs.length,
-
-      articles: articleDocs.map(doc => ({
-        id: doc._id,
-        title: doc.title,
-        subtitle: doc.subtitle,
-        description: doc.description,
-        category: doc.category,
-        createdAt: doc.createdAt,
-        updatedAt: doc.updatedAt,
-        updatedAt: doc.updatedAt,
-        owner: doc.owner
-      })),
-
+      articles: articleDocs.map(doc => mapOnlyArticle(doc)),
       request: {
         type: 'GET'
       }
@@ -157,5 +177,6 @@ module.exports = {
   updateUser,
   getUserById,
   deleteUser,
-  getArticlesByUserId
+  getArticlesByUserId,
+  getUserList
 };

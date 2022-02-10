@@ -69,9 +69,74 @@ function createQuery(requestQuery) {
   return query;
 }
 
+function mapOnlyUser(userFromDb) {
+  const {_id, firstName, lastName, nickname, role, createdAt, numberOfArticles, articles} =
+    userFromDb;
+  return {
+    id: _id,
+    firstName,
+    lastName,
+    nickname,
+    role,
+    createdAt,
+    numberOfArticles,
+    articles
+  };
+}
+
+function mapOnlyArticle(articleFromDb) {
+  const {_id, title, subtitle, description, category, createdAt, updatedAt, owner} = articleFromDb;
+
+  return {
+    id: _id,
+    title,
+    subtitle,
+    description,
+    category,
+    createdAt,
+    updatedAt,
+    owner
+  };
+}
+
+function mapArticleWithOwner(articleFromDb) {
+  const {_id, title, subtitle, description, category, createdAt, updatedAt, owner} = articleFromDb;
+
+  return {
+    id: _id,
+    title,
+    subtitle,
+    description,
+    category,
+    createdAt,
+    updatedAt,
+    owner: mapOnlyUser(owner)
+  };
+}
+
+function mapUserWithArticles(userFromDb) {
+  const {_id, firstName, lastName, nickname, role, createdAt, numberOfArticles, articles} =
+    userFromDb;
+
+  return {
+    id: _id,
+    firstName,
+    lastName,
+    nickname,
+    role,
+    createdAt,
+    numberOfArticles,
+    articles: articles.map(article => mapOnlyArticle(article))
+  };
+}
+
 module.exports = {
   findArticleAndOwner,
   findArticle,
   findOwner,
-  createQuery
+  createQuery,
+  mapOnlyUser,
+  mapOnlyArticle,
+  mapArticleWithOwner,
+  mapUserWithArticles
 };

@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
 const ArticleModel = require('../models/article');
 const UserModel = require('../models/user');
-const {findArticleAndOwner, findOwner, createQuery} = require('./user_article_queries');
+const {
+  findArticleAndOwner,
+  findOwner,
+  createQuery,
+  mapOnlyArticle,
+  mapArticleWithOwner
+} = require('./user_article_queries');
 
 const getArticleList = async (req, res, next) => {
   const requestQuery = req.query;
@@ -19,16 +25,7 @@ const getArticleList = async (req, res, next) => {
 
     res.status(200).json({
       count: articleDocs.length,
-      articles: articleDocs.map(doc => ({
-        id: doc._id,
-        title: doc.title,
-        subtitle: doc.subtitle,
-        description: doc.description,
-        category: doc.category,
-        createdAt: doc.createdAt,
-        updatedAt: doc.updatedAt,
-        owner: doc.owner
-      })),
+      articles: articleDocs.map(doc => mapArticleWithOwner(doc)),
       request: {
         type: 'GET'
       }
@@ -68,7 +65,7 @@ const createArticle = async (req, res, next) => {
 
     res.status(201).json({
       message: 'Article was created!',
-      createdArticle,
+      createdArticle: mapOnlyArticle(createdArticle),
       request: {
         type: 'GET',
         url: `/api/articles/${createdArticle._id}`
@@ -127,7 +124,11 @@ const updateArticle = async (req, res, next) => {
 
     res.status(200).json({
       message: `article with id ${articleId} was updated successfully`,
-      updateCount: updateResult.modifiedCount
+      updateCount: updateResult.modifiedCount,
+      request: {
+        type: 'GET',
+        url: `/api/articles/${article._id}`
+      }
     });
   } catch (error) {
     next(error);
